@@ -1,0 +1,14 @@
+[workspace]
+members = [
+    "kitti_dataset_reader",
+]
+
+[[bin]]
+name = "run_system"
+path = "run.rs"
+
+[package]
+name = "dora-simple-vo"
+version = "0.0.0"
+edition = "2021"
+
