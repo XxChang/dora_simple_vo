@@ -11,3 +11,5 @@ csv = "*"
 clap = { version = "4.0.3", features = ["derive"] }
 nalgebra = { version = "0.32.3" }
 image = "*"
+dora-node-api = "0.3.0"
+
