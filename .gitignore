@@ -13,3 +13,5 @@ _deps
 # cargo
 target
 Cargo.lock
+
+dataset/*
