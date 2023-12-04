@@ -5,7 +5,7 @@ nodes:
       source: target/debug/kitti_dataset_reader
       inputs:
         tick: 
-          source: dora/timer/secs/2
+          source: dora/timer/millis/100
           queue_size: 1000
       outputs:
         - stereo_image

@@ -10,3 +10,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 dora-operator-api = { version = "0.3.0" }
+opencv = { version = "0.88.1" }

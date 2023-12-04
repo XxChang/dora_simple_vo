@@ -58,7 +58,7 @@ fn main() {
                         if r_camera.seq_num != l_camera.seq_num {
                             panic!("please sync message reading");
                         }
-
+                        
                         let data_type = 
                         DataType::FixedSizeList(
                             Arc::new(Field::new("raw_data", DataType::UInt8, false)), 
