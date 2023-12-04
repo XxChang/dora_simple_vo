@@ -10,9 +10,8 @@ nodes:
       outputs:
         - stereo_image
   - id: plot-stereo-image-node
-    operators:
-      - id: plot-stereo-image-operator 
-        shared-library: target/debug/plot_stereo_image
-        inputs:
-          stereo_image: kitti-dataset-reader/stereo_image
+    custom:
+      source: target/debug/plot_stereo_image
+      inputs:
+        stereo_image: kitti-dataset-reader/stereo_image
 

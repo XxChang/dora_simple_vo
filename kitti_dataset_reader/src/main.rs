@@ -4,8 +4,8 @@ use std::sync::Arc;
 use std::io::prelude::*;
 use image::io::Reader as ImageReader;
 use dora_node_api::arrow::datatypes::Field;
-use dora_node_api::arrow::array::{ArrayData, BufferBuilder};
-use dora_node_api::arrow::array::FixedSizeListArray;
+use dora_node_api::arrow::array::{ArrayData, BufferBuilder, UInt32Array, ArrayRef};
+use dora_node_api::arrow::array::{FixedSizeListArray, StructArray};
 use dora_node_api::dora_core::config::DataId;
 use dora_node_api::{DoraNode, Event};
 mod kitti_message;
@@ -59,11 +59,14 @@ fn main() {
                             panic!("please sync message reading");
                         }
                         
-                        let data_type = 
-                        DataType::FixedSizeList(
-                            Arc::new(Field::new("raw_data", DataType::UInt8, false)), 
-                            r_image.as_raw().len() as _);
-            
+                        let width = Arc::new(UInt32Array::from(vec![r_image.width(), l_image.width()]));
+                        let height = Arc::new(UInt32Array::from(vec![r_image.height(), l_image.height()]));
+
+                        let data_type = DataType::FixedSizeList(
+                            Arc::new(Field::new("item", DataType::UInt8, false)),
+                            r_image.as_raw().len() as _
+                        );
+                        
                         let mut buffer = BufferBuilder::<u8>::new(2*r_image.as_raw().len());
                         buffer.append_slice(r_image.as_raw());
                         buffer.append_slice(l_image.as_raw());
@@ -73,13 +76,29 @@ fn main() {
                             .len(2*r_image.as_raw().len())
                             .add_buffer(buffer).build().unwrap();
 
-                        let list_data = ArrayData::builder(data_type)
+                        let list_data = ArrayData::builder(data_type.clone())
                             .len(2)
                             .add_child_data(value_data)
                             .build().unwrap();
-                        let list_array = FixedSizeListArray::from(list_data);
+
+                        let list_array = Arc::new(FixedSizeListArray::from(list_data));
                         
-                        node.send_output(output_id.clone(), metadata.parameters, list_array).unwrap();
+                        let struct_array = StructArray::from(vec![
+                            (
+                                Arc::new(Field::new("width", DataType::UInt32, false)),
+                                width.clone() as ArrayRef,
+                            ),
+                            (
+                                Arc::new(Field::new("height", DataType::UInt32, false)),
+                                height.clone() as ArrayRef,
+                            ),
+                            (
+                                Arc::new(Field::new("raw", data_type, false)),
+                                list_array.clone() as ArrayRef,
+                            )
+                        ]);
+                        
+                        node.send_output(output_id.clone(), metadata.parameters, struct_array).unwrap();
                     } else {
                         break;
                     }
