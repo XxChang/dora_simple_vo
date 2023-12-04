@@ -29,6 +29,18 @@ async fn main() -> eyre::Result<()> {
 
     build_package("plot_stereo_image").await?;
 
+    let mut cmd = tokio::process::Command::new("cmake");
+    cmd.arg("--build").arg("build");
+    if !cmd.status().await?.success() {
+        bail!("failed to build a cmake-generated project binary tree");
+    }
+
+    let mut cmd = tokio::process::Command::new("cmake");
+    cmd.arg("--install").arg("build");
+    if !cmd.status().await?.success() {
+        bail!("failed to build a cmake-generated project binary tree");
+    }
+    
     dora_daemon::Daemon::run_dataflow(dataflow).await?;
 
     Ok(())
