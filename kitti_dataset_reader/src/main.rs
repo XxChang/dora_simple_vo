@@ -78,7 +78,7 @@ fn main() {
                             .add_child_data(value_data)
                             .build().unwrap();
                         let list_array = FixedSizeListArray::from(list_data);
-
+                        
                         node.send_output(output_id.clone(), metadata.parameters, list_array).unwrap();
                     } else {
                         break;
