@@ -2,7 +2,7 @@
 
 use dora_operator_api::{register_operator, DoraOperator, Event, types::arrow::array::{FixedSizeListArray, PrimitiveArray} };
 use dora_operator_api::types::arrow::datatypes::UInt8Type;
-use opencv::{core::{CV_8U, Mat_AUTO_STEP, hconcat2, Mat, vconcat2}, highgui::WINDOW_AUTOSIZE};
+use opencv::{core::{CV_8U, Mat_AUTO_STEP, Mat, vconcat2}, highgui::WINDOW_AUTOSIZE};
 use opencv::highgui::{named_window, imshow, wait_key};
 
 register_operator!(PlotStereoImage);
