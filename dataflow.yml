@@ -1,0 +1,11 @@
+nodes:
+  - id: kitti-dataset-reader
+    custom:
+      args: --dataset-path dataset/04.txt
+      source: target/debug/kitti_dataset_reader
+      inputs:
+        tick: dora/timer/millis/100
+      outputs:
+        - stereo_image
+
+  
