@@ -2,6 +2,7 @@
 members = [
     "kitti_dataset_reader",
     "plot_stereo_image",
+    "cxx_plot/rust_part",
 ]
 
 [[bin]]
