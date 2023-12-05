@@ -19,3 +19,5 @@ dataset/*
 # artifacts
 build
 bin
+
+.vscode

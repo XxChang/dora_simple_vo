@@ -6,8 +6,6 @@ set(dora_cxx_include_dir "${CMAKE_CURRENT_BINARY_DIR}/include/cxx")
 set(node_bridge "${CMAKE_CURRENT_BINARY_DIR}/node_bridge.cc")
 set(operator_bridge "${CMAKE_CURRENT_BINARY_DIR}/operator_bridge.cc")
 
-message("vcpkg: ${VCPKG_ROOT}")
-
 if(DORA_ROOT_DIR)
     include(FetchContent)
     FetchContent_Declare(
