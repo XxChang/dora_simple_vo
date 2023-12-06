@@ -19,6 +19,6 @@ find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_executable(cxx_plot main.cc)
-target_link_libraries(cxx_plot PRIVATE rust_part  ${OpenCV_LIBS})
+target_link_libraries(cxx_plot PRIVATE rust_part  ${OpenCV_LIBS} ${Pangolin_LIBRARIES})
 
 install(TARGETS cxx_plot DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin)

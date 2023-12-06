@@ -28,6 +28,8 @@ async fn main() -> eyre::Result<()> {
     build_package("kitti_dataset_reader").await?;
 
     build_package("plot_stereo_image").await?;
+    
+    build_package("rerun_logger").await?;
 
     // let mut cmd = tokio::process::Command::new("cmake");
     // cmd.arg("-DCMAKE_TOOLCHAIN_FILE=/home/xuchang/github/vcpkg/scripts/buildsystems/vcpkg.cmake")

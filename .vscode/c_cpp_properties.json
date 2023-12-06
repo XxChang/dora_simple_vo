@@ -5,7 +5,10 @@
             "includePath": [
                 "${default}",
                 "${workspaceFolder}/build/include/cxx",
-                "/home/xuchang/github/vcpkg/installed/x64-linux/include/",
+                "/home/xuchang/install/ORB_SLAM3-1.0-release/include",
+                "/home/xuchang/install/ORB_SLAM3-1.0-release/include/CameraModels",
+                "/home/xuchang/install/ORB_SLAM3-1.0-release/",
+                "/usr/include/eigen3",
                 "${workspaceFolder}/build/cxx_plot/rust_part"
             ],
             "defines": [],

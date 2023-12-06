@@ -9,9 +9,14 @@ nodes:
           queue_size: 1000
       outputs:
         - stereo_image
-  - id: cxx-plot-node
+  - id: rerun-logger
     custom:
-      source: cxx_plot/bin/cxx_plot
+      source: target/debug/rerun_logger
       inputs:
         stereo_image: kitti-dataset-reader/stereo_image
+  # - id: cxx-plot-node
+  #   custom:
+  #     source: cxx_plot/bin/cxx_plot
+  #     inputs:
+  #       stereo_image: kitti-dataset-reader/stereo_image
 

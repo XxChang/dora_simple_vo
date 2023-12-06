@@ -2,7 +2,7 @@
 #include <iostream>
 #include <opencv4/opencv2/opencv.hpp>
 
-int main() {
+int main(int argc, char** argv) {
     auto dora_node = init_dora_node();
     cv::namedWindow("image", cv::WINDOW_AUTOSIZE);
     cv::Mat image;
@@ -31,13 +31,12 @@ int main() {
                 input.raw_data_r.data()
             };
 
-
             cv::vconcat(r_image.clone(), l_image, image);
             cv::imshow("image", image);
-            if (cv::waitKey(1) > 0) {
+            if (cv::waitKey(1) > 0)
                 break;
-            }
-        } else {
+        }
+        else {
             std::cerr << "Unknown event type " << static_cast<int>(ty) << std::endl;
             break;
         }
