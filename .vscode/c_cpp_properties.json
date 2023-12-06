@@ -9,7 +9,9 @@
                 "/home/xuchang/install/ORB_SLAM3-1.0-release/include/CameraModels",
                 "/home/xuchang/install/ORB_SLAM3-1.0-release/",
                 "/usr/include/eigen3",
-                "${workspaceFolder}/build/cxx_plot/rust_part"
+                "${workspaceFolder}/build/cxx_plot/rust_part",
+                "/usr/local/include/stella_vslam/3rd/json/include",
+                "${workspaceFolder}/build/openvslam_node/pushmessage_rust"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

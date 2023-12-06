@@ -5,3 +5,4 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-fPIC")
 
 add_subdirectory(cxx_plot)
+add_subdirectory(openvslam_node)

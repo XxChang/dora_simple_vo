@@ -31,14 +31,6 @@ async fn main() -> eyre::Result<()> {
     
     build_package("rerun_logger").await?;
 
-    // let mut cmd = tokio::process::Command::new("cmake");
-    // cmd.arg("-DCMAKE_TOOLCHAIN_FILE=/home/xuchang/github/vcpkg/scripts/buildsystems/vcpkg.cmake")
-    // .arg("-B")
-    // .arg("build");
-    // if !cmd.status().await?.success() {
-    //     bail!("failed to create a cmake-generated project binary tree");
-    // }
-
     let mut cmd = tokio::process::Command::new("cmake");
     cmd.arg("--build").arg("build");
     if !cmd.status().await?.success() {
