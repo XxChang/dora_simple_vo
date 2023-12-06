@@ -11,7 +11,8 @@
                 "/usr/include/eigen3",
                 "${workspaceFolder}/build/cxx_plot/rust_part",
                 "/usr/local/include/stella_vslam/3rd/json/include",
-                "${workspaceFolder}/build/openvslam_node/pushmessage_rust"
+                "${workspaceFolder}/build/openvslam_node/pushmessage_rust",
+                "/usr/local/include/stella_vslam/3rd/spdlog/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

@@ -1,18 +1,18 @@
-# KITTI stereo model for seq.03
+# KITTI stereo model for seq.00-02
 
 #==============#
 # Camera Model #
 #==============#
 
 Camera:
-  name: "KITTI stereo 03"
+  name: "KITTI stereo 00-02"
   setup: "stereo"
   model: "perspective"
 
-  fx: 721.5377
-  fy: 721.5377
-  cx: 609.5593
-  cy: 172.854
+  fx: 718.856
+  fy: 718.856
+  cx: 607.1928
+  cy: 185.2157
 
   k1: 0.0
   k2: 0.0
@@ -21,9 +21,9 @@ Camera:
   k3: 0.0
 
   fps: 10.0
-  cols: 1242
-  rows: 375
-  focal_x_baseline: 387.5744
+  cols: 1241
+  rows: 376
+  focal_x_baseline: 386.1448
   depth_threshold: 40
 
   color_order: "Gray"
@@ -51,7 +51,7 @@ Feature:
 #====================#
 
 Mapping:
-  baseline_dist_thr: 0.53715058825
+  baseline_dist_thr: 0.53716571886
   redundant_obs_ratio_thr: 0.9
 
 #========================#

@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <numeric>
 #include <stella_vslam/publish/frame_publisher.h>
+#include <pangolin_viewer/viewer.h>
+#include <stella_vslam/util/yaml.h>
 
 #include "pushmessage_rust.h"
 
@@ -22,17 +24,18 @@ int main(int argc, char **argv) {
 
     slam->startup(true);
     auto frame_publisher = slam->get_frame_publisher();
-    
-    bool closed_all = false;
+
+    std::shared_ptr<pangolin_viewer::viewer> viewer;
+    viewer = std::make_shared<pangolin_viewer::viewer>(
+        stella_vslam::util::yaml_optional_ref(cfg->yaml_node_, "PangolinViewer"),
+        slam,
+        slam->get_frame_publisher(),
+        slam->get_map_publisher());
 
     auto dora_node = init_dora_node();
 
     std::thread thread([&]() {
-        while (!closed_all) {
-            cv::Mat frame = frame_publisher->draw_frame();
-            std::cout << frame.size << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        }
+        viewer->run();
     });
 
     for (;;) {
@@ -78,7 +81,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    closed_all = true;
     thread.join();
 
     // wait until the loop BA is finished

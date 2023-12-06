@@ -1,7 +1,7 @@
 nodes:
   - id: kitti-dataset-reader
     custom:
-      args: --dataset-path dataset/04.txt
+      args: --dataset-path dataset/00/00.txt
       source: target/debug/kitti_dataset_reader
       inputs:
         tick: 
@@ -12,7 +12,7 @@ nodes:
   - id: openvslam-node
     custom:
       source: openvslam_node/bin/openvslam_node
-      args: ./vocabulary/orb_vocab.fbow ./config/KITTI_stereo_03.yaml
+      args: ./vocabulary/orb_vocab.fbow ./config/KITTI_stereo_00-02.yaml
       inputs:
         stereo_image: kitti-dataset-reader/stereo_image
   # - id: rerun-logger
