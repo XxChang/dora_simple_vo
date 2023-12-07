@@ -44,6 +44,21 @@ fn main() {
 
                     rec.log("image", &rerun::Image::try_from(result).unwrap()).unwrap();
                 },
+                "color_frame" => {
+                    let data_inner: StructArray = data.to_data().into();
+                    let width: PrimitiveArray<UInt32Type> = data_inner.column_by_name("width").unwrap().to_data().into();
+                    let height: PrimitiveArray<UInt32Type> = data_inner.column_by_name("height").unwrap().to_data().into();
+
+                    let width: u32 = width.value(0).into();
+                    let height: u32 = height.value(0).into();
+
+                    let raw_data_list: FixedSizeListArray = data_inner.column_by_name("raw").unwrap().to_data().into();
+                    let raw_data: PrimitiveArray<UInt8Type> = raw_data_list.value(0).to_data().into();
+
+                    let image = image::RgbImage::from_raw(width, height, raw_data.values().to_vec()).unwrap();
+                    
+                    rec.log("color_frame", &rerun::Image::try_from(image).unwrap()).unwrap();
+                },
                 other => {
                     eprintln!("Ignoring unexpected input `{other}`");
                     break;

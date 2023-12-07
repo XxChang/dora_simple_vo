@@ -4,7 +4,6 @@
             "name": "Linux",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/build/include/cxx",
                 "/home/xuchang/install/ORB_SLAM3-1.0-release/include",
                 "/home/xuchang/install/ORB_SLAM3-1.0-release/include/CameraModels",
                 "/home/xuchang/install/ORB_SLAM3-1.0-release/",

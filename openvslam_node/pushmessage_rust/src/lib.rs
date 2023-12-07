@@ -1,5 +1,7 @@
+use std::sync::Arc;
+
 use dora_node_api::{
-    Event, arrow::{array::{StructArray, PrimitiveArray, FixedSizeListArray}, datatypes::UInt32Type},
+    Event, arrow::{array::{StructArray, PrimitiveArray, FixedSizeListArray, UInt32Array, ArrayRef, BufferBuilder, ArrayData}, datatypes::{UInt32Type, DataType, Field}},
     EventStream
 };
 use dora_node_api::arrow::datatypes::UInt8Type;
@@ -17,9 +19,12 @@ mod ffi {
         raw_data_r: Vec<u8>,
     } 
 
-    // struct FrameInfo {
-
+    // pub struct FrameInfo {
+    //     width: u32,
+    //     height: u32,
+    //     raw_data: Vec<u8>,
     // }
+
     struct DoraNode {
         events: Box<Events>,
         send_output: Box<OutputSender>,
@@ -49,6 +54,7 @@ mod ffi {
         fn event_type(event: &Box<DoraEvent>) -> DoraEventType;
 
         fn get_pic_from_event(input: Box<DoraEvent>) -> Result<StereoImageInfo>;
+        fn put_frame(sender: &mut Box<OutputSender>, id: String, width: u32, height: u32, data: &[u8]) -> DoraResult;
     }
 }
 
@@ -120,4 +126,93 @@ fn get_pic_from_event(input: Box<DoraEvent>) -> eyre::Result<ffi::StereoImageInf
         raw_data_l: raw_data_r,
         raw_data_r: raw_data_l,
     })
+}
+
+fn put_frame(sender: &mut Box<OutputSender>, id: String, width: u32, height: u32, data: &[u8]) -> ffi::DoraResult {
+    let width = Arc::new(UInt32Array::from(vec![width]));
+    let height = Arc::new(UInt32Array::from(vec![height]));
+
+    let data_type = DataType::FixedSizeList(
+        Arc::new(Field::new("item", DataType::UInt8, false)), 
+        data.len() as _
+    );
+
+    let mut buffer = BufferBuilder::<u8>::new(data.len());
+    buffer.append_slice(data);
+    let buffer = buffer.finish();
+
+    let value_data = ArrayData::builder(DataType::UInt8)
+        .len(data.len())
+        .add_buffer(buffer).build();
+
+    if let Some(e) = value_data.as_ref().err() {
+        return ffi::DoraResult { error: format!("{e:?}")};
+    }
+
+    let value_data = value_data.unwrap();
+
+    let list_data = ArrayData::builder(data_type.clone())
+        .len(1)
+        .add_child_data(value_data)
+        .build();
+
+    if let Some(e) = list_data.as_ref().err() {
+        return ffi::DoraResult { error: format!("{e:?}")};
+    }
+
+    let list_data = list_data.unwrap();
+
+    let list_array = Arc::new(FixedSizeListArray::from(list_data));
+    let struct_array = StructArray::from(vec![
+        (
+            Arc::new(Field::new("width", DataType::UInt32, false)),
+            width.clone() as ArrayRef,
+        ),
+        (
+            Arc::new(Field::new("height", DataType::UInt32, false)),
+            height.clone() as ArrayRef,
+        ),
+        (
+            Arc::new(Field::new("raw", data_type, false)),
+            list_array.clone() as ArrayRef,
+        )
+    ]);
+
+    let result = sender
+        .0
+        .send_output(id.into(), Default::default(), struct_array);
+    let error = match result {
+        Ok(()) => String::new(),
+        Err(err) => format!("{err:?}"),
+    };
+    ffi::DoraResult { error }
+    
+    // if let Some(value_data) = value_data.ok() {
+    //     let list_array = Arc::new(FixedSizeListArray::from(value_data));
+    //     let struct_array = StructArray::from(vec![
+    //         (
+    //             Arc::new(Field::new("width", DataType::UInt32, false)),
+    //             width.clone() as ArrayRef,
+    //         ),
+    //         (
+    //             Arc::new(Field::new("height", DataType::UInt32, false)),
+    //             height.clone() as ArrayRef,
+    //         ),
+    //         (
+    //             Arc::new(Field::new("raw", data_type, false)),
+    //             list_array.clone() as ArrayRef,
+    //         )
+    //     ]);
+        
+    //     let result = sender
+    //         .0
+    //         .send_output(id.into(), Default::default(), struct_array);
+    //     let error = match result {
+    //         Ok(()) => String::new(),
+    //         Err(err) => format!("{err:?}"),
+    //     };
+    //     ffi::DoraResult { error }
+    // } else {
+    //     return ffi::DoraResult { error: format!("ArrayData build failed") };
+    // }
 }

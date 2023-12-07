@@ -31,6 +31,14 @@ async fn main() -> eyre::Result<()> {
     
     build_package("rerun_logger").await?;
 
+    tokio::fs::create_dir_all("build").await?;
+    let mut cmd = tokio::process::Command::new("cmake");
+    cmd.arg("-B").arg("build");
+    cmd.arg(".");
+    if !cmd.status().await?.success() {
+        bail!("failed to generating make file");
+    }
+
     let mut cmd = tokio::process::Command::new("cmake");
     cmd.arg("--build").arg("build");
     if !cmd.status().await?.success() {
